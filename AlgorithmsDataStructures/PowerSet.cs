@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace AlgorithmsDataStructures
 {
-
-    // наследуйте этот класс от HashTable
-    // или расширьте его методами из HashTable
     public class PowerSet<T> : HashTable<T>
     {
         public int count;
