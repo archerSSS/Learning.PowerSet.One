@@ -10,10 +10,6 @@ namespace AlgorithmsDataStructures
     {
         public static void Main(String[] args)
         {
-            int i = 5;
-            int y = 0;
-            
-            if (--i == 3) y = 100;
         }
     }
 }

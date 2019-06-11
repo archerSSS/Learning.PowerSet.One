@@ -184,9 +184,9 @@ namespace AlgoTestProject_1
             byte b2 = 15;
             byte b3 = 100;
             byte b4 = 99;
-            Node node1 = new Node();
-            Node node2 = new Node();
-            Node node3 = new Node();
+            Node node1 = new Node(0);
+            Node node2 = new Node(1);
+            Node node3 = new Node(2);
 
             ps1.Put(n1);
             ps1.Put(n2);
@@ -239,7 +239,7 @@ namespace AlgoTestProject_1
             Assert.AreEqual(true, ps4.Get(node1));
             Assert.AreEqual(true, ps4.Get(node2));
             Assert.AreEqual(true, ps4.Get(node3));
-            Assert.AreEqual(false, ps4.Get(new Node()));
+            Assert.AreEqual(false, ps4.Get(new Node(0)));
         }
 
 
@@ -405,7 +405,7 @@ namespace AlgoTestProject_1
             
             PowerSet<string> ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(2, ps3.count);
+            Assert.AreEqual(5, ps3.count);
 
             Assert.AreEqual(true, ps3.Get("car"));
             Assert.AreEqual(true, ps3.Get("j1"));
@@ -463,10 +463,26 @@ namespace AlgoTestProject_1
         }
 
 
+
+        // ============================
+        // Тесты с разными типами. (int, float, char, string, Node)
+        // 1. Добавление и проверка на наличие и количество.
+        // 2. Максимальное заполнение, проверка на наличие по мере заполнение 
+        //      и итоговая проверка на наличие всех элементов
+        // 3. Попытка добавления элементов пустыми значениями.(null, 0)
+        // 4. Попытка добавления уже существующего элемента.
+        // ============================
+        // 
+        // 
+
+        // Тест 1
+        //
         [TestMethod]
         public void TestPut_Int_1()
         {
             PowerSet<int> ps1 = new PowerSet<int>();
+
+            Assert.AreEqual(0, ps1.Size());
 
             ps1.Put(1);
             ps1.Put(2);
@@ -489,6 +505,70 @@ namespace AlgoTestProject_1
         }
 
 
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestPut_Int_2()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+
+            for (int i = 1; i <= 20000; i++)
+            {
+                Assert.AreEqual(false, ps1.Get(i));
+                ps1.Put(i);
+                Assert.AreEqual(true, ps1.Get(i));
+            }
+
+            Assert.AreEqual(20000, ps1.Size());
+
+            for (int i = 1; i <= 20000; i++)
+                Assert.AreEqual(true, ps1.Get(i));
+        }
+
+
+        // Тест 3
+        //
+        [TestMethod]
+        public void TestPut_Int_3()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+
+            ps1.Put(0);
+            Assert.AreEqual(0, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(0));
+
+            ps1.Put(1);
+            Assert.AreEqual(1, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(1));
+
+            ps1.Put(0);
+            Assert.AreEqual(1, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(1));
+        }
+
+
+        // Тест 4
+        //
+        [TestMethod]
+        public void TestPut_Int_4()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+
+            ps1.Put(3);
+            ps1.Put(32);
+            ps1.Put(321);
+            
+            Assert.AreEqual(3, ps1.Size());
+
+            ps1.Put(3);
+            ps1.Put(32);
+
+            Assert.AreEqual(3, ps1.Size());
+        }
+
+
+        // Тест 1
+        //
         [TestMethod]
         public void TestPut_Float_1()
         {
@@ -515,6 +595,70 @@ namespace AlgoTestProject_1
         }
 
 
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestPut_Float_2()
+        {
+            PowerSet<float> ps1 = new PowerSet<float>();
+
+            for (float i = 1; i <= 20000.0f; i++)
+            {
+                Assert.AreEqual(false, ps1.Get(i));
+                ps1.Put(i);
+                Assert.AreEqual(true, ps1.Get(i));
+            }
+            
+            Assert.AreEqual(20000, ps1.Size());
+
+            for (float i = 1; i <= 20000.0f; i++)
+                Assert.AreEqual(true, ps1.Get(i));
+        }
+
+
+        // Тест 3
+        //
+        [TestMethod]
+        public void TestPut_Float_3()
+        {
+            PowerSet<float> ps1 = new PowerSet<float>();
+
+            ps1.Put(0.0f);
+            Assert.AreEqual(0, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(0.0f));
+
+            ps1.Put(1.1f);
+            Assert.AreEqual(1, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(1.1f));
+
+            ps1.Put(0);
+            Assert.AreEqual(1, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(1.1f));
+        }
+
+
+        // Тест 4
+        //
+        [TestMethod]
+        public void TestPut_Float_4()
+        {
+            PowerSet<float> ps1 = new PowerSet<float>();
+
+            ps1.Put(0.3f);
+            ps1.Put(3.2f);
+            ps1.Put(32.1f);
+
+            Assert.AreEqual(3, ps1.Size());
+
+            ps1.Put(3.2f);
+            ps1.Put(32.1f);
+
+            Assert.AreEqual(3, ps1.Size());
+        }
+
+
+        // Тест 1
+        //
         [TestMethod]
         public void TestPut_Char_1()
         {
@@ -540,6 +684,75 @@ namespace AlgoTestProject_1
         }
 
 
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestPut_Char_2()
+        {
+            PowerSet<char> ps1 = new PowerSet<char>();
+
+            for (int i = 1; i <= 20000; i++)
+            {
+                Assert.AreEqual(false, ps1.Get(Convert.ToChar(i)));
+                ps1.Put(Convert.ToChar(i));
+                Assert.AreEqual(true, ps1.Get(Convert.ToChar(i)));
+            }
+        }
+
+
+        // Тест 2 Альтернатива
+        //
+        [TestMethod]
+        public void TestPut_Char_2A()
+        {
+            PowerSet<char> ps1 = new PowerSet<char>();
+
+            for (int i = 1; i <= 20000; i++)
+                ps1.Put(Convert.ToChar(i));
+
+            Assert.AreEqual(20000, ps1.Size());
+
+            for (int i = 1; i <= 20000; i++)
+                Assert.AreEqual(true, ps1.Get(Convert.ToChar(i)));
+        }
+
+
+        // Тест 3 Альтернатива
+        // Добавление пробела в качестве символа
+        //
+        [TestMethod]
+        public void TestPut_Char_3A()
+        {
+            PowerSet<char> ps1 = new PowerSet<char>();
+
+            ps1.Put(' ');
+            Assert.AreEqual(1, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(' '));
+        }
+
+
+        // Тест 4
+        //
+        [TestMethod]
+        public void TestPut_Char_4()
+        {
+            PowerSet<char> ps1 = new PowerSet<char>();
+
+            ps1.Put(' ');
+            ps1.Put('5');
+            ps1.Put('a');
+
+            Assert.AreEqual(3, ps1.Size());
+
+            ps1.Put('5');
+            ps1.Put('a');
+
+            Assert.AreEqual(3, ps1.Size());
+        }
+
+
+        // Тест 1
+        //
         [TestMethod]
         public void TestPut_String_1()
         {
@@ -568,16 +781,78 @@ namespace AlgoTestProject_1
         }
 
 
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestPut_String_2()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+
+            for (float i = 1; i <= 20000.0f; i++)
+            {
+                Assert.AreEqual(false, ps1.Get(""+i));
+                ps1.Put(""+i);
+                Assert.AreEqual(true, ps1.Get(""+i));
+            }
+
+            Assert.AreEqual(20000, ps1.Size());
+
+            for (float i = 1; i <= 20000.0f; i++)
+                Assert.AreEqual(true, ps1.Get(""+i));
+        }
+
+
+        // Тест 3
+        //
+        [TestMethod]
+        public void TestPut_String_3()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            
+            Assert.AreEqual(0, ps1.Size());
+
+            ps1.Put("");
+            Assert.AreEqual(1, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(""));
+
+            ps1.Put(" ");
+            Assert.AreEqual(2, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(" "));
+        }
+
+
+        // Тест 4
+        //
+        [TestMethod]
+        public void TestPut_String_4()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            
+            ps1.Put("word");
+            ps1.Put("string");
+            ps1.Put("chars");
+
+            Assert.AreEqual(3, ps1.Size());
+
+            ps1.Put("word");
+            ps1.Put("string");
+
+            Assert.AreEqual(3, ps1.Size());
+        }
+
+
+        // Тест 1
+        //
         [TestMethod]
         public void TestPut_Node_1()
         {
             PowerSet<Node> ps1 = new PowerSet<Node>();
 
-            Node node1 = new Node();
-            Node node2 = new Node();
-            Node node3 = new Node();
-            Node node4 = new Node();
-            Node node5 = new Node();
+            Node node1 = new Node(0);
+            Node node2 = new Node(1);
+            Node node3 = new Node(2);
+            Node node4 = new Node(3);
+            Node node5 = new Node(4);
 
             ps1.Put(node1);
             ps1.Put(node2);
@@ -596,6 +871,630 @@ namespace AlgoTestProject_1
 
             Assert.AreEqual(5, ps1.Size());
             Assert.AreEqual(true, ps1.Get(node5));
+        }
+
+
+        // Тест 2 Aльтернатива
+        //
+        [TestMethod]
+        public void TestPut_Node_2()
+        {
+            PowerSet<Node> ps1 = new PowerSet<Node>();
+
+            for (int i = 0; i < 20000; i++)
+                ps1.Put(new Node(i));
+
+            Assert.AreEqual(20000, ps1.Size());
+        }
+        
+
+        // ============================
+        // Тесты с разными типами. (int, char, string, Node)
+        // 1. Метод Intersection() при добавлении 5 значений в обоих множествах 
+        //      по три одинаковых элемента. Проверка на количество.
+        // 2. Максимальное заполнение. 20 одинаковых элемента. Проверка на количество.
+        //
+        // ============================
+        // 
+        // 
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestIntersection_Int_1()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 5; i++)
+                ps1.Put(i);
+
+            for (int i = 3; i <= 7; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Intersection(ps2);
+
+            for (int i = 3; i <= 5; i++)
+                Assert.AreEqual(true, ps3.Get(i));
+
+            Assert.AreEqual(3, ps3.Size());
+            Assert.AreEqual(false, ps3.Get(6));
+            Assert.AreEqual(false, ps3.Get(2));
+        }
+
+
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestIntersection_Int_2()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 20000; i++)
+                ps1.Put(i);
+
+            for (int i = 19981; i <= 39980; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Intersection(ps2);
+
+            for (int i = 19981; i <= 20000; i++)
+                Assert.AreEqual(true, ps3.Get(i));
+
+            Assert.AreEqual(20, ps3.Size());
+            Assert.AreEqual(false, ps3.Get(20005));
+            Assert.AreEqual(false, ps3.Get(16050));
+        }
+
+
+        // Тест 3
+        //
+        [TestMethod]
+        public void TestIntersection_Int_3()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 200; i++)
+                ps1.Put(i);
+            
+            ps3 = ps1.Intersection(ps2);
+            
+            Assert.AreEqual(null, ps3);
+        }
+
+
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestIntersection_Char_1()
+        {
+            PowerSet<char> ps1 = new PowerSet<char>();
+            PowerSet<char> ps2 = new PowerSet<char>();
+            PowerSet<char> ps3;
+
+            for (int i = 1; i <= 20000; i++)
+                ps1.Put(Convert.ToChar(i));
+
+            for (int i = 19981; i <= 39980; i++)
+                ps2.Put(Convert.ToChar(i));
+
+            ps3 = ps1.Intersection(ps2);
+
+            for (int i = 19981; i <= 20000; i++)
+                Assert.AreEqual(true, ps3.Get(Convert.ToChar(i)));
+
+            Assert.AreEqual(20, ps3.Size());
+            Assert.AreEqual(false, ps3.Get(Convert.ToChar(30382)));
+            Assert.AreEqual(false, ps3.Get(Convert.ToChar(10382)));
+        }
+
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestIntersection_String_1()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+            PowerSet<string> ps3;
+
+            for (int i = 1; i <= 5; i++)
+                ps1.Put("" + i);
+
+            for (int i = 3; i <= 7; i++)
+                ps2.Put("" + i);
+
+            ps3 = ps1.Intersection(ps2);
+
+            for (int i = 3; i <= 5; i++)
+                Assert.AreEqual(true, ps3.Get("" + i));
+
+            Assert.AreEqual(3, ps3.Size());
+            Assert.AreEqual(false, ps3.Get("1"));
+            Assert.AreEqual(false, ps3.Get("33"));
+        }
+
+
+        // Тест 3
+        //
+        [TestMethod]
+        public void TestIntersection_Char_3()
+        {
+            PowerSet<char> ps1 = new PowerSet<char>();
+            PowerSet<char> ps2 = new PowerSet<char>();
+            PowerSet<char> ps3;
+
+            for (int i = 1; i <= 200; i++)
+                ps1.Put(Convert.ToChar(i));
+
+            ps3 = ps1.Intersection(ps2);
+
+            Assert.AreEqual(null, ps3);
+        }
+
+
+        // Тест 3 Альтернатива
+        //
+        [TestMethod]
+        public void TestIntersection_Char_3A()
+        {
+            PowerSet<char> ps1 = new PowerSet<char>();
+            PowerSet<char> ps2 = new PowerSet<char>();
+            PowerSet<char> ps3;
+
+            for (int i = 1; i <= 200; i++)
+                ps1.Put(Convert.ToChar(i));
+
+            for (int i = 231; i <= 300; i++)
+                ps1.Put(Convert.ToChar(i));
+
+            ps3 = ps1.Intersection(ps2);
+
+            Assert.AreEqual(null, ps3);
+        }
+
+
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestIntersection_String_2()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+            PowerSet<string> ps3;
+
+            for (int i = 1; i <= 20000; i++)
+                ps1.Put(""+i);
+
+            for (int i = 19981; i <= 39980; i++)
+                ps2.Put(""+i);
+
+            ps3 = ps1.Intersection(ps2);
+
+            for (int i = 19981; i <= 20000; i++)
+                Assert.AreEqual(true, ps3.Get(""+i));
+
+            Assert.AreEqual(20, ps3.Size());
+            Assert.AreEqual(false, ps3.Get("f"));
+            Assert.AreEqual(false, ps3.Get("222"));
+        }
+
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestIntersection_Node_1()
+        {
+            PowerSet<Node> ps1 = new PowerSet<Node>();
+            PowerSet<Node> ps2 = new PowerSet<Node>();
+            PowerSet<Node> ps3;
+            Node[] nodes = new Node[8];
+
+            for (int i = 1; i < nodes.Length; i++)
+                nodes[i] = new Node(i);
+
+            for (int i = 0; i < 5; i++)
+                ps1.Put(nodes[i]);
+
+            for (int i = 2; i < 7; i++)
+                ps2.Put(nodes[i]);
+
+            ps3 = ps1.Intersection(ps2);
+
+            Assert.AreEqual(3, ps3.Size());
+
+            for (int i = 2; i < 5; i++)
+                Assert.AreEqual(true, ps3.Get(nodes[i]));
+        }
+
+
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestIntersection_Node_2()
+        {
+            PowerSet<Node> ps1 = new PowerSet<Node>();
+            PowerSet<Node> ps2 = new PowerSet<Node>();
+            PowerSet<Node> ps3;
+            Node[] nodes = new Node[39980];
+
+            for (int i = 0; i < nodes.Length; i++)
+                nodes[i] = new Node(i);
+
+            for (int i = 0; i < 20000; i++)
+                ps1.Put(nodes[i]);
+
+            for (int i = 19980; i < 39980; i++)
+                ps2.Put(nodes[i]);
+
+            ps3 = ps1.Intersection(ps2);
+
+            Assert.AreEqual(20, ps3.Size());
+            for (int i = 19980; i < 20000; i++)
+                Assert.AreEqual(true, ps3.Get(nodes[i]));
+        }
+
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestDifference_Int_1()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+            
+            for (int i = 1; i <= 5; i++)
+                ps1.Put(i);
+
+            for (int i = 3; i <= 7; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Difference(ps2);
+
+            Assert.AreEqual(4, ps3.Size());
+
+            for (int i = 1; i <= 7; i++)
+            {
+                if (i < 3) Assert.AreEqual(true, ps3.Get(i));
+                else if (i > 5) Assert.AreEqual(true, ps3.Get(i));
+                else Assert.AreEqual(false, ps3.Get(i));
+            }
+                
+        }
+
+
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestDifference_Int_2()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 10000; i++)
+                ps1.Put(i);
+
+            for (int i = 9981; i <= 20000; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Difference(ps2);
+
+            Assert.AreEqual(19980, ps3.Size());
+
+            for (int i = 1; i <= 19980; i++)
+                if (i < 9981 || i > 10000) Assert.AreEqual(true, ps3.Get(i));
+                else Assert.AreEqual(false, ps3.Get(i));
+        }
+
+
+        // Тест 3 Альтернатива
+        //
+        [TestMethod]
+        public void TestDifference_Int_3A()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 5; i++)
+                ps1.Put(i);
+
+            for (int i = 7; i <= 11; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Difference(ps2);
+
+            Assert.AreEqual(10, ps3.Size());
+
+            for (int i = 1; i <= 11; i++)
+                if (!(i > 5) && !(i < 7)) Assert.AreEqual(10, ps3.Size());
+        }
+
+
+        // Тест 3
+        //
+        [TestMethod]
+        public void TestDifference_Int_3()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 5; i++)
+                ps1.Put(i);
+
+            for (int i = 1; i <= 5; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Difference(ps2);
+
+            Assert.AreEqual(null, ps3);
+        }
+
+
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestUnion_Int_2()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 10000; i++)
+                ps1.Put(i);
+
+            for (int i = 9981; i <= 20000; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Union(ps2);
+
+            Assert.AreEqual(20000, ps3.Size());
+
+            for (int i = 1; i <= 20000; i++)
+                Assert.AreEqual(true, ps3.Get(i));
+
+        }
+
+
+        // Тест 3 Альтернатива
+        //
+        [TestMethod]
+        public void TestUnion_Int_3A()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 5; i++)
+                ps2.Put(i);
+
+            ps3 = ps1.Union(ps2);
+
+            Assert.AreEqual(5, ps3.Size());
+
+            for (int i = 1; i < 10; i++)
+            {
+                if (i < 6) Assert.AreEqual(true, ps3.Get(i));
+                else Assert.AreEqual(false, ps3.Get(i));
+            }
+        }
+
+
+        // Тест 3 Альтернатива
+        //
+        [TestMethod]
+        public void TestUnion_Int_3B()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 5; i++)
+                ps1.Put(i);
+
+            ps3 = ps1.Union(ps2);
+
+            Assert.AreEqual(5, ps3.Size());
+
+            for (int i = 1; i < 10; i++)
+            {
+                if (i < 6) Assert.AreEqual(true, ps3.Get(i));
+                else Assert.AreEqual(false, ps3.Get(i));
+            }
+        }
+
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestIsSubset_Int_1()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+
+            for (int i = 1; i <= 5000; i++)
+                ps1.Put(i);
+
+            for (int i = 1000; i <= 1356; i++)
+                ps2.Put(i);
+
+            Assert.AreEqual(true, ps1.IsSubset(ps2));
+        }
+
+
+        // Тест 1 Альтернатива
+        //
+        [TestMethod]
+        public void TestIsSubset_Int_1A()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+
+            for (int i = 1; i <= 5000; i++)
+                ps1.Put(i);
+
+            for (int i = 4000; i <= 5356; i++)
+                ps2.Put(i);
+
+            Assert.AreEqual(false, ps1.IsSubset(ps2));
+        }
+
+
+        // Тест 1 Альтернатива
+        //
+        [TestMethod]
+        public void TestIsSubset_Int_1B()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+
+            for (int i = 1; i <= 5000; i++)
+                ps1.Put(i);
+            
+            Assert.AreEqual(true, ps1.IsSubset(ps2));
+        }
+
+
+        // Тест 2
+        //
+        [TestMethod]
+        public void TestIsSubset_Int_2()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+
+            for (int i = 1; i <= 20000; i++)
+                ps1.Put(i);
+
+            for (int i = 9981; i <= 20000; i++)
+                ps2.Put(i);
+            
+            Assert.AreEqual(true, ps1.IsSubset(ps2));
+        }
+
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestIsSubset_String_1()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+
+            ps1.Put("Goat");
+            ps1.Put("Bear");
+            ps1.Put("Raccoon");
+            ps1.Put("Bird");
+            ps1.Put("Squid");
+
+            ps2.Put("Raccoon");
+            ps2.Put("Bird");
+            ps2.Put("Squid");
+            
+            Assert.AreEqual(true, ps1.IsSubset(ps2));
+        }
+
+
+        // Тест 1 Альтернатива
+        //
+        [TestMethod]
+        public void TestIsSubset_String_1A()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+
+            ps1.Put("Goat");
+            ps1.Put("Bear");
+            ps1.Put("Raccoon");
+            ps1.Put("Bird");
+            ps1.Put("Squid");
+
+            ps2.Put("Raccoon");
+            ps2.Put("Bird");
+            ps2.Put("Turtle");
+
+            Assert.AreEqual(false, ps1.IsSubset(ps2));
+        }
+
+
+        // Тест 2 Альтернатива
+        //
+        [TestMethod]
+        public void TestIsSubset_String_2B()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+
+            for (int i = 1; i <= 5000; i++)
+                ps1.Put(""+i);
+
+            for (int i = 1000; i <= 1356; i++)
+                ps2.Put(""+i);
+
+            Assert.AreEqual(true, ps1.IsSubset(ps2));
+        }
+
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestRemove_Int_1()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            
+            for (int i = 1; i <= 10; i++)
+                ps1.Put(i);
+
+            ps1.Remove(1);
+            ps1.Remove(2);
+            ps1.Remove(0);
+            ps1.Remove(0);
+            ps1.Remove(0);
+            ps1.Remove(0);
+            ps1.Remove(0);
+            ps1.Remove(0);
+            ps1.Remove(0);
+            ps1.Remove(0);
+
+            Assert.AreEqual(8, ps1.Size());
+
+            Assert.AreEqual(true, ps1.Get(3));
+            Assert.AreEqual(true, ps1.Get(4));
+            Assert.AreEqual(true, ps1.Get(0));
+            Assert.AreEqual(false, ps1.Get(1));
+            Assert.AreEqual(false, ps1.Get(2));
+        }
+
+
+        // Тест 1
+        //
+        [TestMethod]
+        public void TestRemove_String_1()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+
+            for (int i = 1; i <= 10; i++)
+                ps1.Put(""+i);
+
+            ps1.Remove("");
+            ps1.Remove(" ");
+            ps1.Remove("1");
+            ps1.Remove("2");
+
+            Assert.AreEqual(8, ps1.Size());
+
+            Assert.AreEqual(true, ps1.Get("3"));
+            Assert.AreEqual(true, ps1.Get("4"));
+            Assert.AreEqual(false, ps1.Get("1"));
+            Assert.AreEqual(false, ps1.Get("2"));
         }
     }
 }

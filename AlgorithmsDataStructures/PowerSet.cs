@@ -13,18 +13,18 @@ namespace AlgorithmsDataStructures
         public PowerSet() : base(20000, 4)
         {
             count = 0;
-            // ваша реализация хранилища
         }
 
         public int Size()
         {
             return count;
-            // количество элементов в множестве
             return 0;
         }
 
         public void Put(T value)
         {
+            //if (value == null) return;
+            //if (value.Equals(default(T))) return;
             int slot = HashFun(value);
             int memSlot = -1;
             
@@ -40,42 +40,43 @@ namespace AlgorithmsDataStructures
                 slots[memSlot] = value;
                 count++;
             }
-            //HashFun(value);
-            // всегда срабатывает
         }
 
         public bool Get(T value)
         {
+            //if (value == null) return false;
+            if (value.Equals(default(T))) return true;
+            
             int slot = HashFun(value);
             for (int i = 0; i < size; i++)
             {
                 if (slot >= size) slot = 0;
                 if (slots[slot] != null)
                     if (slots[slot].Equals(value)) return true;
+                else if (value == null) return true;
                 slot++;
             }
-            // возвращает true если value имеется в множестве,
-            // иначе false
             return false;
         }
 
         public bool Remove(T value)
         {
+            // if (value == null) return false;
+            if (value.Equals(default(T))) return false;
             int slot = HashFun(value);
 
             for (int i = 0; i < size; i++)
             {
                 if (slot >= size) slot = 0;
-                if (slots[slot] != null && slots[slot].Equals(value))
-                {
-                    slots[slot] = default(T);
-                    count--;
-                    return true;
-                }
+                if (slots[slot] != null)
+                    if (slots[slot].Equals(value))
+                    {
+                        slots[slot] = default(T);
+                        count--;
+                        return true;
+                    }
                 slot++;
             }
-            // возвращает true если value удалено
-            // иначе false
             return false;
         }
 
@@ -98,42 +99,44 @@ namespace AlgorithmsDataStructures
                         
                 if (interset.count != 0) return interset;
             }
-            
-            // пересечение текущего множества и set2
             return null;
         }
 
         public PowerSet<T> Union(PowerSet<T> set2)
         {
+            PowerSet<T> unity = new PowerSet<T>();
             if (count != 0 || set2.count != 0)
             {
-                if (count == 0) return set2;
-                if (set2.count == 0) return this; 
-
                 for (int i = 0; i < size; i++)
-                    if (slots[i] != null)
-                        if (!set2.Get(slots[i]))
-                            set2.Put(slots[i]);
-                return set2;
+                {
+                    if (slots[i] != null) unity.Put(slots[i]);
+                    if (set2.slots[i] != null) unity.Put(set2.slots[i]); 
+                }
+                return unity;
             }
-            // объединение текущего множества и set2
             return null;
         }
 
         public PowerSet<T> Difference(PowerSet<T> set2)
         {
-            PowerSet<T> difset = new PowerSet<T>();
-            if (count != 0)
+            PowerSet<T> diff = new PowerSet<T>();
+            if (set2 != null)
             {
-                if (set2.count == 0) return this;
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < slots.Length; i++)
+                {
                     if (slots[i] != null)
-                        if (!set2.Get(slots[i]))
-                            difset.Put(slots[i]);
-                return difset;
+                        diff.Put(slots[i]);
+                }
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    if (set2.slots[i] != null)
+                        if (diff.Get(set2.slots[i])) diff.Remove(set2.slots[i]);
+                        else diff.Put(set2.slots[i]);
+                }
+                if (diff.count != 0) return diff;
             }
-            // разница текущего множества и set2
             return null;
+            
         }
 
         public bool IsSubset(PowerSet<T> set2)
@@ -141,16 +144,34 @@ namespace AlgorithmsDataStructures
             if (count > set2.count)
             {
                 int downcounter = set2.count;
-                if (set2.count == 0 || set2.count == count) return true;
+                if (set2.count == 0) return true;
                 for (int i = 0; i < size; i++)
+                {
                     if (set2.slots[i] != null)
-                        if (Get(set2.slots[i]))
-                            if (--downcounter == 0) return true;
+                        if (!Get(set2.slots[i])) break;
+                    if (i == size - 1) return true;
+                }
+                
             }
-            // возвращает true, если set2 есть
-            // подмножество текущего множества,
-            // иначе false
             return false;
+        }
+
+
+        public PowerSet<T> Diff(PowerSet<T> set2)
+        {
+            PowerSet<T> diff = new PowerSet<T>();
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] != null)
+                    diff.Put(slots[i]);
+            }
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (set2.slots[i] != null)
+                    if (diff.Get(set2.slots[i])) diff.Remove(set2.slots[i]); 
+                    else diff.Put(set2.slots[i]);
+            }
+            return diff;
         }
     }
 
@@ -172,16 +193,18 @@ namespace AlgorithmsDataStructures
         public int HashFun(T value)
         {
             int nx = 0;
-            if (size < 1) return -1;
-            if (value.GetType() == typeof(string))
+            if (size > 0 && value != null)
             {
-                char[] chars = Convert.ToString(value).ToCharArray();
-                for (int i = 0; i < chars.Length - 1; i++)
-                    nx += Convert.ToInt32(chars[i]);
+                if (value.GetType() == typeof(string))
+                {
+                    char[] chars = Convert.ToString(value).ToCharArray();
+                    for (int i = 0; i < chars.Length - 1; i++)
+                        nx += Convert.ToInt32(chars[i]);
+                }
+                else nx = value.GetHashCode();
+                if (nx < 0) return (nx * -1) % size;
+                return nx % size;
             }
-            else nx = value.GetHashCode();
-            if (nx < 0) return (nx * -1) % size;
-            return nx % size;
             return 0;
         }
 
