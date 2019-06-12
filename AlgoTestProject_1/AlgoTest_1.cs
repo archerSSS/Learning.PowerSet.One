@@ -82,8 +82,8 @@ namespace AlgoTestProject_1
             ps2.Put(5);
             ps2.Put(100);
 
-            Assert.AreEqual(4, ps2.count);
-            Assert.AreEqual(6, ps1.count);
+            Assert.AreEqual(4, ps2.Size());
+            Assert.AreEqual(6, ps1.Size());
 
             ps3 = ps1.Union(ps2);
 
@@ -99,7 +99,7 @@ namespace AlgoTestProject_1
             Assert.AreEqual(false, ps3.Get(2));
             Assert.AreEqual(false, ps3.Get(99));
 
-            Assert.AreEqual(9, ps3.count);
+            Assert.AreEqual(9, ps3.Size());
         }
 
 
@@ -116,7 +116,7 @@ namespace AlgoTestProject_1
             ps1.Put(642);
             ps1.Put(5);
 
-            Assert.AreEqual(7, ps1.count);
+            Assert.AreEqual(7, ps1.Size());
             Assert.AreEqual(true, ps1.Get(1));
             Assert.AreEqual(true, ps1.Get(83));
             Assert.AreEqual(true, ps1.Get(923));
@@ -127,7 +127,7 @@ namespace AlgoTestProject_1
 
             ps1.Remove(83);
 
-            Assert.AreEqual(6, ps1.count);
+            Assert.AreEqual(6, ps1.Size());
             Assert.AreEqual(true, ps1.Get(1));
             Assert.AreEqual(false, ps1.Get(83));
             Assert.AreEqual(true, ps1.Get(923));
@@ -252,7 +252,7 @@ namespace AlgoTestProject_1
             int n2 = 174;
             int n3 = 9;
 
-            Assert.AreEqual(0, ps1.count);
+            Assert.AreEqual(0, ps1.Size());
 
             ps1.Put(n1);
             ps1.Put(n2);
@@ -261,16 +261,16 @@ namespace AlgoTestProject_1
             Assert.AreEqual(true, ps1.Get(n1));
             Assert.AreEqual(true, ps1.Get(n2));
             Assert.AreEqual(true, ps1.Get(n3));
-            Assert.AreEqual(3, ps1.count);
+            Assert.AreEqual(3, ps1.Size());
 
             ps1.Put(9);
 
-            Assert.AreEqual(3, ps1.count);
+            Assert.AreEqual(3, ps1.Size());
 
             for (int i = 200; i < 300; i++)
                 ps1.Put(i);
 
-            Assert.AreEqual(103, ps1.count);
+            Assert.AreEqual(103, ps1.Size());
 
             for (int i = 200; i < 300; i++)
                 Assert.AreEqual(true, ps1.Get(i));
@@ -287,7 +287,7 @@ namespace AlgoTestProject_1
             string s3 = "Cu";
             string s4 = "Mt";
 
-            Assert.AreEqual(0, ps1.count);
+            Assert.AreEqual(0, ps1.Size());
 
             ps1.Put(s1);
             ps1.Put(s2);
@@ -300,7 +300,7 @@ namespace AlgoTestProject_1
             Assert.AreEqual(true, ps1.Get(s4));
             Assert.AreEqual(true, ps1.Get("I"));
             Assert.AreEqual(false, ps1.Get("i"));
-            Assert.AreEqual(4, ps1.count);
+            Assert.AreEqual(4, ps1.Size());
         }
 
 
@@ -313,7 +313,7 @@ namespace AlgoTestProject_1
             bool b2 = true;
             bool b3 = true;
 
-            Assert.AreEqual(0, ps1.count);
+            Assert.AreEqual(0, ps1.Size());
 
             ps1.Put(b1);
             ps1.Put(b2);
@@ -323,7 +323,7 @@ namespace AlgoTestProject_1
             Assert.AreEqual(true, ps1.Get(b2));
             Assert.AreEqual(true, ps1.Get(b3)); // обнаруживает тот же слот что и b2
             Assert.AreEqual(true, ps1.Get(false));
-            Assert.AreEqual(1, ps1.count);
+            Assert.AreEqual(1, ps1.Size());
         }
 
 
@@ -347,7 +347,7 @@ namespace AlgoTestProject_1
             Assert.AreEqual(true, ps3.Get("far"));
             Assert.AreEqual(true, ps3.Get("j2"));
             Assert.AreEqual(false, ps3.Get("car"));
-            Assert.AreEqual(2, ps3.count);
+            Assert.AreEqual(2, ps3.Size());
         }
 
 
@@ -368,12 +368,12 @@ namespace AlgoTestProject_1
             ps2.Put("trust");
             ps2.Put("bleach");
 
-            Assert.AreEqual(4, ps1.count);
-            Assert.AreEqual(5, ps2.count);
+            Assert.AreEqual(4, ps1.Size());
+            Assert.AreEqual(5, ps2.Size());
 
             PowerSet<string> ps3 = ps1.Union(ps2);
 
-            Assert.AreEqual(7, ps3.count);
+            Assert.AreEqual(7, ps3.Size());
 
             Assert.AreEqual(true, ps3.Get("far"));
             Assert.AreEqual(true, ps3.Get("j2"));
@@ -405,7 +405,7 @@ namespace AlgoTestProject_1
             
             PowerSet<string> ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(5, ps3.count);
+            Assert.AreEqual(5, ps3.Size());
 
             Assert.AreEqual(true, ps3.Get("car"));
             Assert.AreEqual(true, ps3.Get("j1"));

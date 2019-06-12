@@ -11,7 +11,7 @@ namespace AlgorithmsDataStructures
         public int Size()
         {
             int count = 0;
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < siz; i++)
                 if (slots[i] != null && !slots[i].Equals(default(T)))
                     count++;
             if (count != 0) return count; 
@@ -25,9 +25,9 @@ namespace AlgorithmsDataStructures
             int slot = HashFun(value);
             int memSlot = -1;
             
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < siz; i++)
             {
-                if (slot >= size) slot = 0;
+                if (slot >= siz) slot = 0;
                 if ((slots[slot] == null || slots[slot].Equals(default(T))) && memSlot == -1) memSlot = slot;
                 if (slots[slot] != null && slots[slot].Equals(value)) return;
                 slot += step;
@@ -42,9 +42,9 @@ namespace AlgorithmsDataStructures
             if (value != null)
             {
                 int slot = HashFun(value);
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < siz; i++)
                 {
-                    if (slot >= size) slot = 0;
+                    if (slot >= siz) slot = 0;
                     if (slots[slot] != null)
                         if (slots[slot].Equals(value)) return true;
                     slot += step;
@@ -59,9 +59,9 @@ namespace AlgorithmsDataStructures
             if (value.Equals(default(T))) return false;
             int slot = HashFun(value);
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < siz; i++)
             {
-                if (slot >= size) slot = 0;
+                if (slot >= siz) slot = 0;
                 if (slots[slot] != null)
                     if (slots[slot].Equals(value))
                     {
@@ -78,7 +78,7 @@ namespace AlgorithmsDataStructures
             PowerSet<T> interset = new PowerSet<T>();
             if (Size() != 0 && set2.Size() != 0)
             {
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < siz; i++)
                 {
                     if (slots[i] == null) continue;
                     else if (slots[i].Equals(default(T))) continue;
@@ -94,7 +94,7 @@ namespace AlgorithmsDataStructures
             PowerSet<T> unity = new PowerSet<T>();
             if (Size() != 0 || set2.Size() != 0)
             {
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < siz; i++)
                 {
                     if (slots[i] != null) unity.Put(slots[i]);
                     if (set2.slots[i] != null) unity.Put(set2.slots[i]); 
@@ -109,12 +109,12 @@ namespace AlgorithmsDataStructures
             PowerSet<T> diff = new PowerSet<T>();
             if (set2 != null)
             {
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < siz; i++)
                 {
                     if (slots[i] != null)
                         diff.Put(slots[i]);
                 }
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < siz; i++)
                 {
                     if (set2.slots[i] != null)
                         if (diff.Get(set2.slots[i])) diff.Remove(set2.slots[i]);
@@ -131,11 +131,11 @@ namespace AlgorithmsDataStructures
             if (Size() > set2.Size())
             {
                 if (set2.Size() == 0) return true;
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < siz; i++)
                 {
-                    if (set2.slots[i] != null)
+                    if (set2.slots[i] != null && !set2.slots[i].Equals(default(T)))
                         if (!Get(set2.slots[i])) break;
-                    if (i == size - 1) return true;
+                    if (i == siz - 1) return true;
                 }   
             }
             return false;
@@ -144,23 +144,23 @@ namespace AlgorithmsDataStructures
 
     public class HashTable<T>
     {
-        public int size;
+        public int siz;
         public int step;
         public T[] slots;
 
         public HashTable(int sz, int stp)
         {
-            size = sz;
+            siz = sz;
             step = stp;
-            slots = new T[size];
-            for (int i = 0; i < size; i++)
+            slots = new T[siz];
+            for (int i = 0; i < siz; i++)
                 slots[i] = default(T);
         }
 
         public int HashFun(T value)
         {
             int nx = 0;
-            if (size > 0 && value != null)
+            if (siz > 0 && value != null)
             {
                 if (value.GetType() == typeof(string))
                 {
@@ -169,8 +169,8 @@ namespace AlgorithmsDataStructures
                         nx += Convert.ToInt32(chars[i]);
                 }
                 else nx = value.GetHashCode();
-                if (nx < 0) return (nx * -1) % size;
-                return nx % size;
+                if (nx < 0) return (nx * -1) % siz;
+                return nx % siz;
             }
             return 0;
         }
@@ -179,11 +179,11 @@ namespace AlgorithmsDataStructures
         {
             int nx = HashFun(value);
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < siz; i++)
             {
                 if (slots[nx] == null) return nx;
                 else nx += step;
-                if (nx >= size) nx = nx % size;
+                if (nx >= siz) nx = nx % siz;
             }
             return -1;
         }
@@ -198,7 +198,7 @@ namespace AlgorithmsDataStructures
 
         public int Find(string value)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < siz; i++)
                 if (slots[i].Equals(value)) return i;
             return -1;
         }
