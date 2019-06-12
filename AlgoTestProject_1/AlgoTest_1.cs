@@ -567,6 +567,21 @@ namespace AlgoTestProject_1
         }
 
 
+        // Тест 5
+        //
+        [TestMethod]
+        public void TestPut_Int_5()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+
+            for (int i = 0; i < 20000; i++)
+                ps1.Put(i);
+
+            Assert.AreEqual(19999, ps1.Size());
+            Assert.AreEqual(true, ps1.Get(1));
+        }
+
+
         // Тест 1
         //
         [TestMethod]
@@ -1495,6 +1510,105 @@ namespace AlgoTestProject_1
             Assert.AreEqual(true, ps1.Get("4"));
             Assert.AreEqual(false, ps1.Get("1"));
             Assert.AreEqual(false, ps1.Get("2"));
+        }
+
+
+        // Бит тест
+        //
+        [TestMethod]
+        public void TestBitTest_1()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+
+            for (int i = 0; i < 15000; i++)
+                ps2.Put("" + i);
+
+            Assert.AreEqual(true, ps2.Get("42"));
+            Assert.AreEqual(true, ps2.Get("9281"));
+            Assert.AreEqual(true, ps2.Get("618"));
+            Assert.AreEqual(15000, ps2.Size());
+
+            for (int i = 5000; i < 10000; i++)
+                ps2.Put("" + i);
+
+            Assert.AreEqual(15000, ps2.Size());
+
+            for (int i = 5000; i < 10000; i++)
+                ps2.Remove(""+i);
+
+            Assert.AreEqual(10000, ps2.Size());
+            Assert.AreEqual(true, ps2.Get("42"));
+            Assert.AreEqual(true, ps2.Get("618"));
+            Assert.AreEqual(false, ps2.Get("9281"));
+            Assert.AreEqual(false, ps2.Get("6814"));
+
+            for (int i = 4000; i < 10000; i++)
+                ps2.Put("" + i);
+
+            // 0 -> 15000
+            Assert.AreEqual(15000, ps2.Size());
+            Assert.AreEqual(true, ps2.Get("6814"));
+
+            for (int i = 8000; i < 16000; i++)
+                ps1.Put("" + i);
+
+            PowerSet<string> ps3 = ps1.Intersection(ps2);
+
+            Assert.AreEqual(7000, ps3.Size());
+            Assert.AreEqual(true, ps3.Get("8814"));
+            Assert.AreEqual(true, ps3.Get("9391"));
+            Assert.AreEqual(true, ps3.Get("10425"));
+            Assert.AreEqual(true, ps3.Get("12954"));
+            Assert.AreEqual(false, ps3.Get("16954"));
+
+            for (int i = 15000; i < 17000; i++)
+                ps3.Put("" + i);
+
+            // 8000 -> 16999
+            Assert.AreEqual(9000, ps3.Size());       
+
+            Assert.AreEqual(true, ps3.Get("10391"));
+            Assert.AreEqual(true, ps3.Get("10425"));
+            Assert.AreEqual(true, ps3.Get("16454"));
+
+            // 0 -> 7999; 15000 -> 16999
+            PowerSet<string> ps4 = ps3.Difference(ps2);
+
+            Assert.AreEqual(10000, ps4.Size());
+            Assert.AreEqual(true, ps4.Get("16325"));
+            Assert.AreEqual(true, ps4.Get("16954"));
+            Assert.AreEqual(true, ps4.Get("3001"));
+            Assert.AreEqual(true, ps4.Get("4128"));
+            Assert.AreEqual(false, ps4.Get("17000"));
+            Assert.AreEqual(false, ps4.Get("8001"));
+            
+            PowerSet<string> ps5 = ps1.Union(ps4);
+
+            Assert.AreEqual(17000, ps5.Size());
+            Assert.AreEqual(true, ps5.Get("16325"));
+            Assert.AreEqual(true, ps5.Get("16954"));
+            Assert.AreEqual(true, ps5.Get("3001"));
+            Assert.AreEqual(true, ps5.Get("4128"));
+            Assert.AreEqual(true, ps5.Get("16999"));
+            Assert.AreEqual(true, ps5.Get("8001"));
+
+            Assert.AreEqual(true, ps5.IsSubset(ps1));
+            Assert.AreEqual(true, ps5.IsSubset(ps3));
+            Assert.AreEqual(false, ps2.IsSubset(ps1));
+            Assert.AreEqual(false, ps1.IsSubset(ps3));
+
+            Assert.AreEqual(true, ps5.Remove("7163"));
+            Assert.AreEqual(true, ps5.Remove("6929"));
+            Assert.AreEqual(true, ps5.Remove("121"));
+            Assert.AreEqual(true, ps5.Remove("8234"));
+            Assert.AreEqual(false, ps5.Remove("121"));
+
+            Assert.AreEqual(16996, ps5.Size());
+            Assert.AreEqual(10000, ps4.Size());
+            Assert.AreEqual(9000, ps3.Size());
+            Assert.AreEqual(15000, ps2.Size());
+            Assert.AreEqual(8000, ps1.Size());
         }
     }
 }
