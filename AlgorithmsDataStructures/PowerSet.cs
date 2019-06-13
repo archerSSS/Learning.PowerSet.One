@@ -31,8 +31,6 @@ namespace AlgorithmsDataStructures
 
         public void Put(T value)
         {
-            //if (value == null) return;
-            //if (value.Equals(default(T))) return;
             int slot = HashFun(value);
             int memSlot = -1;
 
@@ -48,14 +46,12 @@ namespace AlgorithmsDataStructures
 
         public bool Get(T value)
         {
-            //if (value == null) return false;
             if (Find(value) == 1) return true;
             return false;
         }
 
         public bool Remove(T value)
         {
-            // if (value == null) return false;
             if (value.Equals(default(T))) return false;
             int slot = HashFun(value);
 
