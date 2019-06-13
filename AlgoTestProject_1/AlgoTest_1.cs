@@ -979,7 +979,7 @@ namespace AlgoTestProject_1
             
             ps3 = ps1.Intersection(ps2);
             
-            Assert.AreEqual(null, ps3);
+            Assert.AreEqual(0, ps3.Size());
         }
 
 
@@ -993,8 +993,10 @@ namespace AlgoTestProject_1
             PowerSet<char> ps3;
 
             for (int i = 1; i <= 20000; i++)
+            {
                 ps1.Put(Convert.ToChar(i));
-
+            }
+            
             for (int i = 19981; i <= 39980; i++)
                 ps2.Put(Convert.ToChar(i));
 
@@ -1049,7 +1051,7 @@ namespace AlgoTestProject_1
 
             ps3 = ps1.Intersection(ps2);
 
-            Assert.AreEqual(null, ps3);
+            Assert.AreEqual(0, ps3.Size());
         }
 
 
@@ -1066,11 +1068,11 @@ namespace AlgoTestProject_1
                 ps1.Put(Convert.ToChar(i));
 
             for (int i = 231; i <= 300; i++)
-                ps1.Put(Convert.ToChar(i));
+                ps2.Put(Convert.ToChar(i));
 
             ps3 = ps1.Intersection(ps2);
 
-            Assert.AreEqual(null, ps3);
+            Assert.AreEqual(0, ps3.Size());
         }
 
 
@@ -1250,7 +1252,7 @@ namespace AlgoTestProject_1
 
             ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(null, ps3);
+            Assert.AreEqual(0, ps3.Size());
         }
 
 
@@ -1609,6 +1611,134 @@ namespace AlgoTestProject_1
             Assert.AreEqual(9000, ps3.Size());
             Assert.AreEqual(15000, ps2.Size());
             Assert.AreEqual(8000, ps1.Size());
+        }
+
+
+        // Бит тест 2
+        //
+        [TestMethod]
+        public void TestBitTest_2()
+        {
+            PowerSet<float> ps2 = new PowerSet<float>();
+
+            ps2.Remove(2.01f);
+            ps2.Remove(51.79f);
+            ps2.Remove(910536.5353f);
+            ps2.Put(910536.5353f);
+        }
+
+
+        // Бит тест 3
+        //
+        [TestMethod]
+        public void TestBitTest_3()
+        {
+            PowerSet<double> ps1 = new PowerSet<double>();
+
+            ps1.Put(701834.24414);
+            ps1.Put(910536.53531341);
+            ps1.Put(691.5353134114);
+            ps1.Put(10259.5353134114);
+            ps1.Put(4905013.5353134114);
+            ps1.Put(-19038.8523);
+        }
+
+
+        // Бит тест 4
+        //
+        [TestMethod]
+        public void TestBitTest_4()
+        {
+            PowerSet<double> ps1 = new PowerSet<double>();
+            
+            ps1.Put(701834.24414);
+            ps1.Put(910536.53531341);
+            ps1.Put(691.5353134114);
+            ps1.Put(10259.5353134114);
+            ps1.Put(4905013.5353134114);
+            ps1.Put(-19038.8523);
+        }
+
+
+        // Бит тест 5
+        //
+        [TestMethod]
+        public void TestBitTest_5()
+        {
+            PowerSet<double> ps1 = new PowerSet<double>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+            double d1 = 1937469.956012;
+            double d2 = 93189.955;
+            double d3 = 855729.1383;
+
+
+            ps1.Put(d1);
+            ps1.Put(d2);
+            ps1.Put(d3);
+            ps2.Put("hatopal-0001. Imp");
+
+            int x = ps1.Find(d1);
+            int y = ps1.Find(d2);
+            int z = ps1.Find(d3);
+
+            int zz = ps2.Find("hatopal-0001. Imp");
+        }
+
+
+        // Бит тест 6
+        //
+        [TestMethod]
+        public void TestBitTest_6()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+
+            ps1.Put("sad");
+            ps1.Put("mag");
+            ps1.Put("tap");
+            ps1.Put("tab");
+            ps1.Put("tas");
+
+            ps2.Put("pop");
+            ps2.Put("tap");
+            ps2.Put("tab");
+            ps2.Put("tas");
+
+            PowerSet<string> ps3 = ps1.Difference(ps2);
+
+            Assert.AreEqual(3, ps3.Size());
+            Assert.AreEqual(true, ps3.Get("sad"));
+            Assert.AreEqual(true, ps3.Get("mag"));
+            Assert.AreEqual(true, ps3.Get("pop"));
+        }
+
+
+        // Бит тест 7
+        //
+        [TestMethod]
+        public void TestBitTest_7()
+        {
+            PowerSet<string> ps1 = new PowerSet<string>();
+            PowerSet<string> ps2 = new PowerSet<string>();
+            PowerSet<string> ps3 = new PowerSet<string>();
+            PowerSet<string> ps4 = new PowerSet<string>();
+
+            ps1.Put("sad");
+            ps1.Put("mag");
+            ps1.Put("tap");
+            ps1.Put("tab");
+            ps1.Put("tas");
+
+            ps2.Put("mag");
+            ps2.Put("tab");
+            ps2.Put("tap");
+
+            Assert.AreEqual(true, ps1.IsSubset(ps2));
+            Assert.AreEqual(true, ps1.IsSubset(ps3));
+            Assert.AreEqual(false, ps2.IsSubset(ps1));
+            Assert.AreEqual(false, ps3.IsSubset(ps1));
+            Assert.AreEqual(true, ps3.IsSubset(ps4));
+            Assert.AreEqual(true, ps4.IsSubset(ps3));
         }
     }
 }
