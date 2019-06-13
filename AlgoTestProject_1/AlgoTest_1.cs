@@ -405,7 +405,7 @@ namespace AlgoTestProject_1
             
             PowerSet<string> ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(5, ps3.Size());
+            Assert.AreEqual(2, ps3.Size());
 
             Assert.AreEqual(true, ps3.Get("car"));
             Assert.AreEqual(true, ps3.Get("j1"));
@@ -1174,15 +1174,52 @@ namespace AlgoTestProject_1
 
             ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(4, ps3.Size());
+            Assert.AreEqual(2, ps3.Size());
 
             for (int i = 1; i <= 7; i++)
             {
                 if (i < 3) Assert.AreEqual(true, ps3.Get(i));
-                else if (i > 5) Assert.AreEqual(true, ps3.Get(i));
+                else if (i > 5) Assert.AreEqual(false, ps3.Get(i));
                 else Assert.AreEqual(false, ps3.Get(i));
             }
-                
+        }
+
+
+        // Тест 1 Альтернатива
+        //
+        [TestMethod]
+        public void TestDifference_Int_1A()
+        {
+            PowerSet<int> ps1 = new PowerSet<int>();
+            PowerSet<int> ps2 = new PowerSet<int>();
+            PowerSet<int> ps3;
+
+            for (int i = 1; i <= 10; i++)
+                ps1.Put(i);
+
+            ps2.Put(3);
+            ps2.Put(6);
+            ps2.Put(7);
+            ps2.Put(10);
+
+            ps3 = ps1.Difference(ps2);
+
+            Assert.AreEqual(6, ps3.Size());
+            Assert.AreEqual(true, ps3.Get(1));
+            Assert.AreEqual(true, ps3.Get(2));
+            Assert.AreEqual(true, ps3.Get(4));
+            Assert.AreEqual(true, ps3.Get(5));
+            Assert.AreEqual(true, ps3.Get(8));
+            Assert.AreEqual(true, ps3.Get(9));
+            Assert.AreEqual(false, ps3.Get(3));
+            Assert.AreEqual(false, ps3.Get(6));
+            Assert.AreEqual(false, ps3.Get(7));
+            Assert.AreEqual(false, ps3.Get(10));
+
+            for (int i = 11; i < 20000; i++)
+            {
+                Assert.AreEqual(false, ps3.Get(i));
+            }
         }
 
 
@@ -1203,10 +1240,10 @@ namespace AlgoTestProject_1
 
             ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(19980, ps3.Size());
+            Assert.AreEqual(9980, ps3.Size());
 
             for (int i = 1; i <= 19980; i++)
-                if (i < 9981 || i > 10000) Assert.AreEqual(true, ps3.Get(i));
+                if (i < 9981) Assert.AreEqual(true, ps3.Get(i));
                 else Assert.AreEqual(false, ps3.Get(i));
         }
 
@@ -1228,10 +1265,13 @@ namespace AlgoTestProject_1
 
             ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(10, ps3.Size());
+            Assert.AreEqual(5, ps3.Size());
 
             for (int i = 1; i <= 11; i++)
-                if (!(i > 5) && !(i < 7)) Assert.AreEqual(10, ps3.Size());
+            {
+                if (!(i > 5)) Assert.AreEqual(true, ps3.Get(i));
+                else Assert.AreEqual(false, ps3.Get(i));
+            }
         }
 
 
@@ -1514,110 +1554,10 @@ namespace AlgoTestProject_1
             Assert.AreEqual(false, ps1.Get("2"));
         }
 
-
-        // Бит тест
+        // Бит тест 1
         //
         [TestMethod]
         public void TestBitTest_1()
-        {
-            PowerSet<string> ps1 = new PowerSet<string>();
-            PowerSet<string> ps2 = new PowerSet<string>();
-
-            for (int i = 0; i < 15000; i++)
-                ps2.Put("" + i);
-
-            Assert.AreEqual(true, ps2.Get("42"));
-            Assert.AreEqual(true, ps2.Get("9281"));
-            Assert.AreEqual(true, ps2.Get("618"));
-            Assert.AreEqual(15000, ps2.Size());
-
-            for (int i = 5000; i < 10000; i++)
-                ps2.Put("" + i);
-
-            Assert.AreEqual(15000, ps2.Size());
-
-            for (int i = 5000; i < 10000; i++)
-                ps2.Remove(""+i);
-
-            Assert.AreEqual(10000, ps2.Size());
-            Assert.AreEqual(true, ps2.Get("42"));
-            Assert.AreEqual(true, ps2.Get("618"));
-            Assert.AreEqual(false, ps2.Get("9281"));
-            Assert.AreEqual(false, ps2.Get("6814"));
-
-            for (int i = 4000; i < 10000; i++)
-                ps2.Put("" + i);
-
-            // 0 -> 15000
-            Assert.AreEqual(15000, ps2.Size());
-            Assert.AreEqual(true, ps2.Get("6814"));
-
-            for (int i = 8000; i < 16000; i++)
-                ps1.Put("" + i);
-
-            PowerSet<string> ps3 = ps1.Intersection(ps2);
-
-            Assert.AreEqual(7000, ps3.Size());
-            Assert.AreEqual(true, ps3.Get("8814"));
-            Assert.AreEqual(true, ps3.Get("9391"));
-            Assert.AreEqual(true, ps3.Get("10425"));
-            Assert.AreEqual(true, ps3.Get("12954"));
-            Assert.AreEqual(false, ps3.Get("16954"));
-
-            for (int i = 15000; i < 17000; i++)
-                ps3.Put("" + i);
-
-            // 8000 -> 16999
-            Assert.AreEqual(9000, ps3.Size());       
-
-            Assert.AreEqual(true, ps3.Get("10391"));
-            Assert.AreEqual(true, ps3.Get("10425"));
-            Assert.AreEqual(true, ps3.Get("16454"));
-
-            // 0 -> 7999; 15000 -> 16999
-            PowerSet<string> ps4 = ps3.Difference(ps2);
-
-            Assert.AreEqual(10000, ps4.Size());
-            Assert.AreEqual(true, ps4.Get("16325"));
-            Assert.AreEqual(true, ps4.Get("16954"));
-            Assert.AreEqual(true, ps4.Get("3001"));
-            Assert.AreEqual(true, ps4.Get("4128"));
-            Assert.AreEqual(false, ps4.Get("17000"));
-            Assert.AreEqual(false, ps4.Get("8001"));
-            
-            PowerSet<string> ps5 = ps1.Union(ps4);
-
-            Assert.AreEqual(17000, ps5.Size());
-            Assert.AreEqual(true, ps5.Get("16325"));
-            Assert.AreEqual(true, ps5.Get("16954"));
-            Assert.AreEqual(true, ps5.Get("3001"));
-            Assert.AreEqual(true, ps5.Get("4128"));
-            Assert.AreEqual(true, ps5.Get("16999"));
-            Assert.AreEqual(true, ps5.Get("8001"));
-
-            Assert.AreEqual(true, ps5.IsSubset(ps1));
-            Assert.AreEqual(true, ps5.IsSubset(ps3));
-            Assert.AreEqual(false, ps2.IsSubset(ps1));
-            Assert.AreEqual(false, ps1.IsSubset(ps3));
-
-            Assert.AreEqual(true, ps5.Remove("7163"));
-            Assert.AreEqual(true, ps5.Remove("6929"));
-            Assert.AreEqual(true, ps5.Remove("121"));
-            Assert.AreEqual(true, ps5.Remove("8234"));
-            Assert.AreEqual(false, ps5.Remove("121"));
-
-            Assert.AreEqual(16996, ps5.Size());
-            Assert.AreEqual(10000, ps4.Size());
-            Assert.AreEqual(9000, ps3.Size());
-            Assert.AreEqual(15000, ps2.Size());
-            Assert.AreEqual(8000, ps1.Size());
-        }
-
-
-        // Бит тест 2
-        //
-        [TestMethod]
-        public void TestBitTest_2()
         {
             PowerSet<float> ps2 = new PowerSet<float>();
 
@@ -1628,13 +1568,29 @@ namespace AlgoTestProject_1
         }
 
 
+        // Бит тест 2
+        //
+        [TestMethod]
+        public void TestBitTest_2()
+        {
+            PowerSet<double> ps1 = new PowerSet<double>();
+
+            ps1.Put(701834.24414);
+            ps1.Put(910536.53531341);
+            ps1.Put(691.5353134114);
+            ps1.Put(10259.5353134114);
+            ps1.Put(4905013.5353134114);
+            ps1.Put(-19038.8523);
+        }
+
+
         // Бит тест 3
         //
         [TestMethod]
         public void TestBitTest_3()
         {
             PowerSet<double> ps1 = new PowerSet<double>();
-
+            
             ps1.Put(701834.24414);
             ps1.Put(910536.53531341);
             ps1.Put(691.5353134114);
@@ -1648,22 +1604,6 @@ namespace AlgoTestProject_1
         //
         [TestMethod]
         public void TestBitTest_4()
-        {
-            PowerSet<double> ps1 = new PowerSet<double>();
-            
-            ps1.Put(701834.24414);
-            ps1.Put(910536.53531341);
-            ps1.Put(691.5353134114);
-            ps1.Put(10259.5353134114);
-            ps1.Put(4905013.5353134114);
-            ps1.Put(-19038.8523);
-        }
-
-
-        // Бит тест 5
-        //
-        [TestMethod]
-        public void TestBitTest_5()
         {
             PowerSet<double> ps1 = new PowerSet<double>();
             PowerSet<string> ps2 = new PowerSet<string>();
@@ -1685,10 +1625,10 @@ namespace AlgoTestProject_1
         }
 
 
-        // Бит тест 6
+        // Бит тест 5
         //
         [TestMethod]
-        public void TestBitTest_6()
+        public void TestBitTest_5()
         {
             PowerSet<string> ps1 = new PowerSet<string>();
             PowerSet<string> ps2 = new PowerSet<string>();
@@ -1706,17 +1646,17 @@ namespace AlgoTestProject_1
 
             PowerSet<string> ps3 = ps1.Difference(ps2);
 
-            Assert.AreEqual(3, ps3.Size());
+            Assert.AreEqual(2, ps3.Size());
             Assert.AreEqual(true, ps3.Get("sad"));
             Assert.AreEqual(true, ps3.Get("mag"));
-            Assert.AreEqual(true, ps3.Get("pop"));
+            Assert.AreEqual(false, ps3.Get("pop"));
         }
 
 
-        // Бит тест 7
+        // Бит тест 6
         //
         [TestMethod]
-        public void TestBitTest_7()
+        public void TestBitTest_6()
         {
             PowerSet<string> ps1 = new PowerSet<string>();
             PowerSet<string> ps2 = new PowerSet<string>();

@@ -108,13 +108,7 @@ namespace AlgorithmsDataStructures
                 for (int i = 0; i < size; i++)
                 {
                     if (slots[i] != null)
-                        diff.Put(slots[i]);
-                }
-                for (int i = 0; i < size; i++)
-                {
-                    if (set2.slots[i] != null)
-                        if (diff.Get(set2.slots[i])) diff.Remove(set2.slots[i]);
-                        else diff.Put(set2.slots[i]);
+                        if (!set2.Get(slots[i])) diff.Put(slots[i]);
                 }
                 return diff;
             }
